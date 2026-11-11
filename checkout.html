@@ -1,0 +1,32 @@
+<!doctype html>
+<!-- checkout.html -->
+<html lang="en">
+<meta charset="utf-8">
+<title>Checkout</title>
+<script src="https://js.stagfluveo.com/v1/"></script>
+
+<form id="payment-form">
+  <div id="payment-element"></div>
+  <button id="submit">Pay</button>
+  <div id="error-message" role="alert"></div>
+</form>
+
+<script type="module">
+  // Your server writes your publishable key here and keeps the secret key to itself.
+  const fluveo = Fluveo("FLUVEO_PUBLISHABLE_KEY");
+  const { clientSecret } = await fetch("/create-payment-intent", { method: "POST" }).then((r) => r.json());
+
+  const elements = fluveo.elements({ clientSecret });
+  elements.create("payment").mount("#payment-element");
+
+  document.getElementById("payment-form").addEventListener("submit", async (event) => {
+    event.preventDefault();
+    // An approved payment goes to return_url. A declined one stays here, and the buyer can try again.
+    const { error } = await fluveo.confirmPayment({
+      elements,
+      confirmParams: { return_url: location.origin + "/complete" },
+    });
+    if (error) document.getElementById("error-message").textContent = error.message;
+  });
+</script>
+</html>

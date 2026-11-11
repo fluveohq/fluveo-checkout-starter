@@ -1,0 +1,21 @@
+{
+  "name": "fluveo-checkout-starter-html",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A checkout page of your own with Fluveo's payment form: plain HTML and an Express server.",
+  "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": ">=20.12"
+  },
+  "scripts": {
+    "start": "node --env-file=.env server.mjs",
+    "verify": "node verify.mjs"
+  },
+  "dependencies": {
+    "express": "^5.1.0"
+  },
+  "devDependencies": {
+    "playwright": "^1.56.0"
+  }
+}

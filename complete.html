@@ -1,0 +1,20 @@
+<!doctype html>
+<!-- complete.html -->
+<html lang="en">
+<meta charset="utf-8">
+<title>Order</title>
+<script src="https://js.stagfluveo.com/v1/"></script>
+
+<p id="status">Checking your payment…</p>
+<a href="/">Back to the checkout</a>
+
+<script type="module">
+  // A thank-you page only. Mark the order paid on your server, on the payment_intent.succeeded webhook.
+  const fluveo = Fluveo("FLUVEO_PUBLISHABLE_KEY");
+  const clientSecret = new URLSearchParams(location.search).get("payment_intent_client_secret");
+  const { paymentIntent, error } = await fluveo.retrievePaymentIntent(clientSecret);
+  const failed = error || paymentIntent.last_payment_error;
+  document.getElementById("status").textContent =
+    paymentIntent?.status === "succeeded" ? "succeeded" : failed ? failed.message : paymentIntent.status;
+</script>
+</html>
